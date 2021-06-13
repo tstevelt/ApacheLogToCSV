@@ -30,6 +30,11 @@
 	FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 	OTHER DEALINGS IN THE SOFTWARE.
 
+	Who		Date		Modification
+	---------------------------------------------------------------------
+	tms		06/13/2021	* Removed check for existing output file
+	tms		06/13/2021	* Added starting line option.
+
 ----------------------------------------------------------------------------*/
 
 #include	<stdio.h>
@@ -125,6 +130,7 @@ int main (int argc, char ** argv)
 	FILE	*ifp, *ofp;
 	char	xbuffer[10240];
 	int		lineno;
+	int		StartLine = 0;
 //	int		Debug = 0;
 	int		len, ndx, InQuote, InBracket;
 	char		workbuf[24];
@@ -132,7 +138,7 @@ int main (int argc, char ** argv)
 
 	if ( argc < 3 )
 	{
-		printf ( "USAGE: ApacheLogToCSV  infile  outfile\n" );
+		printf ( "USAGE: ApacheLogToCSV infile outfile [startline]\n" );
 		exit ( 1 );
 	}
 
@@ -142,11 +148,11 @@ int main (int argc, char ** argv)
 		exit ( 1 );
 	}
 
-	if ( access ( argv[2], F_OK ) == 0 )
-	{
-		printf ( "Output file %s exists! Program canceled!\n", argv[2] );
-		exit ( 1 );
-	}
+//	if ( access ( argv[2], F_OK ) == 0 )
+//	{
+//		printf ( "Output file %s exists! Program canceled!\n", argv[2] );
+//		exit ( 1 );
+//	}
 
 	if (( ifp = fopen ( argv[1], "r" )) == (FILE *)0 )
 	{
@@ -158,6 +164,11 @@ int main (int argc, char ** argv)
 	{
 		printf ( "Cannot created output file %s\n", argv[2] );
 		exit ( 1 );
+	}
+
+	if ( argc > 3 )
+	{
+		StartLine = atoi ( argv[3] );
 	}
 
 	lineno = 0;
@@ -176,6 +187,12 @@ int main (int argc, char ** argv)
 	while ( fgets ( xbuffer, sizeof(xbuffer), ifp ) != (char *)0 )
 	{
 		lineno++;
+
+		if ( lineno < StartLine )
+		{
+			continue;
+		}
+
 		len = strlen ( xbuffer );
 
 		InQuote = InBracket = 0;
