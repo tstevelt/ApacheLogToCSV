@@ -28,4 +28,3 @@ clean:
 all:
 	make clean
 	make
-
