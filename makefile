@@ -2,26 +2,28 @@
 CFLAGS = -Wall 
 
 PROG = ApacheLogToCSV
-
-PRG = /usr/local/bin/$(PROG)
+DIR = /usr/local/bin
 HEADERS = 
 OBJECTS = $(PROG).o
 
-default: $(PRG)
+default: $(PROG)
 
 %.o: %.c $(HEADERS)
 	gcc -c $< -o $@
 
-$(PRG): $(OBJECTS)
+$(PROG): $(OBJECTS)
 	gcc $(OBJECTS) -o $@
-	strip $(PRG)
-	ls -l $(PRG)
+	strip $(PROG)
+	ls -l $(PROG)
 
 .SILENT:
 
+install:
+	cp -pv $(PROG) $(DIR)/$(PROG)
+
 clean:
 	-rm -f $(OBJECTS)
-	-rm -f $(PRG)
+	-rm -f $(PROG)
 
 all:
 	make clean
