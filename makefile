@@ -19,7 +19,7 @@ $(PROG): $(OBJECTS)
 .SILENT:
 
 install:
-	cp -pv $(PROG) $(DIR)/$(PROG)
+	mv $(PROG) $(DIR)/$(PROG)
 
 clean:
 	-rm -f $(OBJECTS)
