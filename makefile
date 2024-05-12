@@ -1,30 +1,25 @@
-
-CFLAGS = -Wall 
-
 PROG = ApacheLogToCSV
-DIR = /usr/local/bin
-HEADERS = 
-OBJECTS = $(PROG).o
+LIB = ApacheLogToCSV.a
+DEF = /usr/local/include
+PRG = /usr/local/bin/$(PROG)
 
-default: $(PROG)
-
-%.o: %.c $(HEADERS)
-	gcc -c $< -o $@
-
-$(PROG): $(OBJECTS)
-	gcc $(OBJECTS) -o $@
-	strip $(PROG)
-	ls -l $(PROG)
+FILES = \
+	$(LIB)(ApacheLogToCSV.o)
 
 .SILENT:
 
-install:
-	mv $(PROG) $(DIR)/$(PROG)
+$(PRG): $(LIB) $(XLIB)
+	echo "using gcc to load $(PRG)"
+	gcc -o $(PRG) $(LIB) $(XLIB)
+
+$(LIB): $(FILES)
 
 clean:
-	-rm -f $(OBJECTS)
-	-rm -f $(PROG)
+	rm -f $(LIB)
 
 all:
 	make clean
 	make
+
+.PRECIOUS: $(LIB)
+
